@@ -121,10 +121,12 @@ async def handle_general_text(update: Update, text: str):
     try:
         url = f"https://tamtam.freewebhostmost.com/apiAhmed.php?user_input={text}"
         response = requests.get(url)
+
         if response.status_code == 200:
-            # تعديل النص: حذف الأقواس [] واستبدال 💡 بـ OTH👨‍💻
+            # فك الترميز للتأكد من أن النص يظهر بشكل صحيح
+            gpt_response = response.content.decode('utf-8', errors='replace')
             gpt_response = (
-                response.text
+                gpt_response
                 .replace("Ahmed", "")
                 .replace("\r\n", "")
                 .replace("\n", "")
