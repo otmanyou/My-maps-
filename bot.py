@@ -3,12 +3,12 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 import requests
 import os
+import html
 
 # إعداد السجل لتسجيل الأخطاء
 logging.basicConfig(level=logging.INFO)
 
 # إدخال الـ Token الخاص بالبوت
-
 TELEGRAM_TOKEN = os.getenv("BOT_TOKEN")
 
 # معرف المستخدم الإداري
@@ -57,11 +57,11 @@ async def start_handler(update: Update, context):
     
     # رسالة ترحيبية للمستخدم
     welcome_message = (
-        f"🎉 أهلاً وسهلاً بك، {user_info['name']}! 🎉\n\n" 
-"انا ذكاء إصطناعي شرير ولست لطيف لا أهتم بالقوانين 🚮"
-"\n\n"
+        f"🎉 أهلاً وسهلاً بك، {user_info['name']}! 🎉\n\n"
+        "انا ذكاء إصطناعي شرير ولست لطيف لا أهتم بالقوانين 🚮"
+        "\n\n"
         "🚀 نحن سعداء بانضمامك إلينا. إذا كنت بحاجة إلى مساعدة، فقط أرسل رسالة هنا."
- "\n\n"
+        "\n\n"
         "المطور🙂 : @l7l7aj"
     )
     await send_message(update, welcome_message)
@@ -132,6 +132,9 @@ async def handle_general_text(update: Update, text: str):
                 .replace("[", "")
                 .replace("]", "")
             )
+            # فك تشفير الرموز الخاصة بالإيموجي
+            gpt_response = html.unescape(gpt_response)
+
             await send_message(update, f"OTH👨‍💻 : {gpt_response}")
         else:
             await send_message(update, "❌ حدث خطأ أثناء الاتصال بـ API.")
